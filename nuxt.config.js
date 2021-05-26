@@ -70,6 +70,17 @@ export default {
     },
   },
 
+  // Environment Configuration
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3002',
+  },
+
+  // Server Configuration
+  server: {
+    host: 'localhost',
+    port: process.env.PORT || 3001,
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }

@@ -45,13 +45,23 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
+          title: 'Home',
           to: '/',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
+          icon: 'mdi-adjust',
+          title: 'Ping',
+          to: '/ping',
+        },
+        {
+          icon: 'mdi-home-plus',
+          title: 'Add Host',
+          to: '/add',
+        },
+        {
+          icon: 'mdi-home-remove',
+          title: 'Remove Host',
+          to: '/remove',
         },
       ],
     }
