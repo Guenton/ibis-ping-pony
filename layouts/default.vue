@@ -18,6 +18,12 @@
       <v-spacer />
       <ping-pony-logo />
       <v-spacer />
+      <v-btn v-show="!isPinging" color="secondary" fab small @click="setPingState">
+        <v-icon>mdi-power</v-icon>
+      </v-btn>
+      <v-btn v-show="isPinging" color="primary" fab small @click="setPingState">
+        <v-icon>mdi-power</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-main>
@@ -34,7 +40,7 @@
 </template>
 
 <script>
-import PingPonyLogo from '~/components/images/PingPonyLogo.vue'
+import PingPonyLogo from '~/components/images/PingPonyLogo.vue';
 
 export default {
   components: { PingPonyLogo },
@@ -59,7 +65,29 @@ export default {
           to: '/add',
         },
       ],
-    }
+      setPingStateResult: '',
+      setPingStateError: '',
+    };
   },
-}
+  computed: {
+    isPinging() {
+      return this.$store.state.isPinging;
+    },
+  },
+  methods: {
+    async setPingState() {
+      try {
+        const res = this.isPinging
+          ? await this.$axios.$post(`${process.env.baseUrl}/state`, { trigger: 'off' })
+          : await this.$axios.$post(`${process.env.baseUrl}/state`, { trigger: 'on' });
+        this.setPingStateResult = res;
+
+        const isOn = await this.$axios.$post(`${process.env.baseUrl}/state`, { trigger: 'check' });
+        this.$store.commit('setPinging', isOn);
+      } catch (err) {
+        this.setPingStateError = err;
+      }
+    },
+  },
+};
 </script>

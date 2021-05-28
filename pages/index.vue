@@ -134,15 +134,15 @@ export default {
       itemsPerPage: 10,
       sortBy: 'name',
       keys: ['Id', 'InputHost', 'Host', 'Ip', 'Time', 'Timestamp', 'IsAlive'],
-    }
+    };
   },
   mounted() {
-    this.getProbes()
+    this.getProbes();
   },
   methods: {
     async getProbes() {
       try {
-        const probes = await this.$axios.$get(`${process.env.baseUrl}/probes`)
+        const probes = await this.$axios.$get(`${process.env.baseUrl}/probes`);
 
         this.items = probes.map((probe) => ({
           id: probe.id,
@@ -152,11 +152,11 @@ export default {
           time: probe.time,
           timestamp: new Date(probe.timestamp).toLocaleString(),
           isAlive: probe.isAlive,
-        }))
+        }));
       } catch (err) {
-        this.error = err
+        this.error = err;
       }
     },
   },
-}
+};
 </script>

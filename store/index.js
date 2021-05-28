@@ -1,13 +1,9 @@
 export const state = () => ({
-  hosts: [],
-})
+  isPinging: false,
+});
 
 export const mutations = {
-  add(state, host) {
-    state.hosts.push(host)
+  setPinging(state, bool = false) {
+    state.isPinging = bool;
   },
-  remove(state, host) {
-    const index = state.hosts.indexOf(host)
-    state.hosts.splice(index, 1)
-  },
-}
+};

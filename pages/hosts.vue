@@ -129,56 +129,56 @@ export default {
       deleteResult: '',
       addHostResult: '',
       error: '',
-    }
+    };
   },
   mounted() {
-    this.getListOfHosts()
+    this.getListOfHosts();
   },
   methods: {
     clearResultMessages() {
-      this.pingResult = ''
-      this.deleteResult = ''
-      this.addHostResult = ''
-      this.error = ''
+      this.pingResult = '';
+      this.deleteResult = '';
+      this.addHostResult = '';
+      this.error = '';
     },
     async getListOfHosts() {
-      this.clearResultMessages()
+      this.clearResultMessages();
       try {
-        const res = await this.$axios.$get(`${process.env.baseUrl}/hosts`)
-        this.hosts = res
+        const res = await this.$axios.$get(`${process.env.baseUrl}/hosts`);
+        this.hosts = res;
       } catch (err) {
-        this.error = err
+        this.error = err;
       }
     },
     async pingByHost(host = '') {
-      this.clearResultMessages()
+      this.clearResultMessages();
       try {
-        const res = await this.$axios.$post(`${process.env.baseUrl}/ping`, { host })
-        this.pingResult = res
+        const res = await this.$axios.$post(`${process.env.baseUrl}/ping`, { host });
+        this.pingResult = res;
       } catch (err) {
-        this.error = err
+        this.error = err;
       }
     },
     async deleteById(id = null) {
-      this.clearResultMessages()
+      this.clearResultMessages();
       try {
-        const res = await this.$axios.$post(`${process.env.baseUrl}/delete`, { id })
-        this.deleteResult = res
-        this.getListOfHosts()
+        const res = await this.$axios.$post(`${process.env.baseUrl}/delete`, { id });
+        this.deleteResult = res;
+        this.getListOfHosts();
       } catch (err) {
-        this.error = err
+        this.error = err;
       }
     },
     async addHost() {
-      this.clearResultMessages()
+      this.clearResultMessages();
       try {
-        const res = await this.$axios.$post(`${process.env.baseUrl}/host`, { host: this.host })
-        this.addHostResult = res
-        this.getListOfHosts()
+        const res = await this.$axios.$post(`${process.env.baseUrl}/host`, { host: this.host });
+        this.addHostResult = res;
+        this.getListOfHosts();
       } catch (err) {
-        this.error = err
+        this.error = err;
       }
     },
   },
-}
+};
 </script>

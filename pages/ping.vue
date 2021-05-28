@@ -82,17 +82,17 @@ export default {
       hostRules: [(val) => !!val || 'Host is required'],
       result: '',
       error: '',
-    }
+    };
   },
   methods: {
     async ping() {
       try {
-        const res = await this.$axios.$post(`${process.env.baseUrl}/ping`, { host: this.host })
-        this.result = res
+        const res = await this.$axios.$post(`${process.env.baseUrl}/ping`, { host: this.host });
+        this.result = res;
       } catch (err) {
-        this.error = err
+        this.error = err;
       }
     },
   },
-}
+};
 </script>

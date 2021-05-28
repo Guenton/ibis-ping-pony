@@ -14,11 +14,11 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
-        semi: false,
+        semi: true,
         singleQuote: true,
         endOfLine: 'auto',
         printWidth: 100,
       },
     ],
   },
-}
+};
