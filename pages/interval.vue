@@ -47,11 +47,15 @@ export default {
       min: 1,
       max: 180,
       error: '',
+      result: '',
     };
   },
   computed: {
     currentInterval() {
       return this.$store.state.interval;
+    },
+    isPinging() {
+      return this.$store.state.isPinging;
     },
   },
   mounted() {
@@ -60,6 +64,7 @@ export default {
   methods: {
     clearResultMessages() {
       this.error = '';
+      this.result = '';
     },
     async getInterval() {
       this.clearResultMessages();
@@ -73,10 +78,17 @@ export default {
     async setInterval() {
       this.clearResultMessages();
       try {
-        const interval = await this.$axios.$post(`${process.env.baseUrl}/interval`, {
+        const res = await this.$axios.$post(`${process.env.baseUrl}/interval`, {
           interval: this.interval,
         });
-        this.$store.commit('setInterval', interval);
+        this.result = res;
+        this.$store.commit('setInterval', this.interval);
+
+        // if Pinging start and stop on new interval
+        if (this.isPinging) {
+          await this.$axios.$post(`${process.env.baseUrl}/state`, { trigger: 'off' });
+          await this.$axios.$post(`${process.env.baseUrl}/state`, { trigger: 'on' });
+        }
       } catch (err) {
         this.error = err;
       }
