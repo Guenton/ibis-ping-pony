@@ -54,14 +54,9 @@ export default {
           to: '/ping',
         },
         {
-          icon: 'mdi-home-plus',
-          title: 'Add Host',
+          icon: 'mdi-home',
+          title: 'Hosts',
           to: '/add',
-        },
-        {
-          icon: 'mdi-home-remove',
-          title: 'Remove Host',
-          to: '/remove',
         },
       ],
     }

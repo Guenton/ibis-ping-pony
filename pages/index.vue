@@ -1,63 +1,158 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-row>
-        <v-icon large>mdi-home-automation</v-icon>
-        <v-alert>{{ response.host }}</v-alert>
-      </v-row>
-      <v-row>
-        <v-icon large>mdi-numeric</v-icon>
-        <v-alert>{{ response.ip }}</v-alert>
-      </v-row>
-      <v-row>
-        <v-icon large>mdi-timer</v-icon>
-        <v-alert>{{ response.time }}</v-alert>
-      </v-row>
-      <v-row>
-        <v-icon large>mdi-close-network</v-icon>
-        <v-alert>{{ response.packetLoss }}</v-alert>
-      </v-row>
-      <v-row>
-        <v-icon large>mdi-power</v-icon>
-        <v-alert>{{ response.alive }}</v-alert>
-      </v-row>
-    </v-col>
-  </v-row>
+  <v-container fluid>
+    <v-data-iterator
+      :items="items"
+      :items-per-page.sync="itemsPerPage"
+      :page.sync="page"
+      :search="search"
+      :sort-by="sortBy.toLowerCase()"
+      :sort-desc="sortDesc"
+      hide-default-footer
+    >
+      <template #header>
+        <v-toolbar dark color="accent" class="mb-1">
+          <v-text-field
+            v-model="search"
+            clearable
+            flat
+            solo-inverted
+            hide-details
+            prepend-inner-icon="mdi-magnify"
+            label="Search"
+          ></v-text-field>
+          <template v-if="$vuetify.breakpoint.mdAndUp">
+            <v-spacer></v-spacer>
+            <v-select
+              v-model="sortBy"
+              flat
+              solo-inverted
+              hide-details
+              :items="keys"
+              prepend-inner-icon="mdi-magnify"
+              label="Sort by"
+            ></v-select>
+            <v-spacer></v-spacer>
+            <v-btn-toggle v-model="sortDesc" mandatory>
+              <v-btn large depressed color="primary" :value="false">
+                <v-icon>mdi-arrow-up</v-icon>
+              </v-btn>
+              <v-btn large depressed color="primary" :value="true">
+                <v-icon>mdi-arrow-down</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </template>
+        </v-toolbar>
+      </template>
+
+      <template #default="props">
+        <v-row class="mt-5 mb-2 hidden-md-and-down">
+          <v-toolbar>
+            <v-row class="mx-2" align="center" justify="center">
+              <v-col cols="1">ID</v-col>
+              <v-col cols="2">InputHost</v-col>
+              <v-col cols="2">Host</v-col>
+              <v-col cols="2">IP</v-col>
+              <v-col cols="1">Time</v-col>
+              <v-col cols="3">TimeStamp</v-col>
+              <v-col cols="1">isAlive</v-col>
+            </v-row>
+          </v-toolbar>
+        </v-row>
+        <v-row>
+          <v-col v-for="item in props.items" :key="item.id" cols="12">
+            <v-card class="my-1">
+              <v-row class="mx-2" align="center" justify="center">
+                <v-col cols="2" lg="1">{{ item.id }}</v-col>
+                <v-col cols="10" sm="4" lg="2">{{ item.inputHost }}</v-col>
+                <v-col cols="6" lg="2" class="d-none d-sm-flex">{{ item.host }}</v-col>
+
+                <v-col cols="3" sm="2" class="hidden-lg-and-up">
+                  <v-icon v-if="!item.isAlive" color="error">mdi-lan-disconnect</v-icon>
+                  <v-icon v-if="item.isAlive" color="success">mdi-lan-connect</v-icon>
+                </v-col>
+
+                <v-col cols="9" sm="4" lg="2">{{ item.ip }}</v-col>
+                <v-col cols="12" lg="1" class="hidden-md-and-down">{{ item.time }}</v-col>
+                <v-col cols="12" sm="6" lg="3">{{ item.timestamp }}</v-col>
+
+                <v-col cols="3" lg="1" class="hidden-md-and-down">
+                  <v-icon v-if="!item.isAlive" color="error">mdi-lan-disconnect</v-icon>
+                  <v-icon v-if="item.isAlive" color="success">mdi-lan-connect</v-icon>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
+      </template>
+
+      <template #footer>
+        <v-row class="mt-5" align="center" justify="center">
+          <span class="grey--text">Items per page</span>
+          <v-menu offset-y>
+            <template #activator="{ on, attrs }">
+              <v-btn dark text color="primary" class="ml-2" v-bind="attrs" v-on="on">
+                {{ itemsPerPage }}
+                <v-icon>mdi-chevron-down</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                v-for="(number, index) in itemsPerPageArray"
+                :key="index"
+                @click="updateItemsPerPage(number)"
+              >
+                <v-list-item-title>{{ number }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+
+          <v-spacer></v-spacer>
+
+          <span class="mr-4 grey--text"> Page {{ page }} of {{ numberOfPages }} </span>
+          <v-btn fab dark color="primary" class="mr-1" @click="formerPage">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-btn fab dark color="primary" class="ml-1" @click="nextPage">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </v-row>
+      </template>
+    </v-data-iterator>
+  </v-container>
 </template>
 
 <script>
 export default {
-  components: {},
   data() {
     return {
-      hosts: ['test'],
-      headers: [{ text: 'Host' }],
-      response: {
-        host: '',
-        ip: '',
-        time: '',
-        packetLoss: '',
-        alive: '',
-      },
-      error: null,
+      items: [],
+      itemsPerPageArray: [5, 10, 25, 50],
+      search: '',
+      filter: {},
+      sortDesc: false,
+      page: 1,
+      itemsPerPage: 10,
+      sortBy: 'name',
+      keys: ['Id', 'InputHost', 'Host', 'Ip', 'Time', 'Timestamp', 'IsAlive'],
     }
   },
   mounted() {
-    this.getPing()
+    this.getProbes()
   },
   methods: {
-    async getPing() {
+    async getProbes() {
       try {
-        const probe = await this.$axios.$post('http://localhost:3002/ping', {
-          host: 'www.google.com',
-        })
-        this.response = {
+        const probes = await this.$axios.$get(`${process.env.baseUrl}/probes`)
+
+        this.items = probes.map((probe) => ({
+          id: probe.id,
+          inputHost: probe.inputHost,
           host: probe.host,
-          ip: probe.numeric_host,
+          ip: probe.numericHost,
           time: probe.time,
-          packetLoss: probe.packetLoss,
-          alive: probe.alive,
-        }
+          timestamp: new Date(probe.timestamp).toLocaleString(),
+          isAlive: probe.isAlive,
+        }))
       } catch (err) {
         this.error = err
       }
