@@ -2,8 +2,6 @@
   <v-container fluid>
     <v-data-iterator
       :items="items"
-      :items-per-page.sync="itemsPerPage"
-      :page.sync="page"
       :search="search"
       :sort-by="sortBy.toLowerCase()"
       :sort-desc="sortDesc"
@@ -84,39 +82,6 @@
           </v-col>
         </v-row>
       </template>
-
-      <template #footer>
-        <v-row class="mt-5" align="center" justify="center">
-          <span class="grey--text">Items per page</span>
-          <v-menu offset-y>
-            <template #activator="{ on, attrs }">
-              <v-btn dark text color="primary" class="ml-2" v-bind="attrs" v-on="on">
-                {{ itemsPerPage }}
-                <v-icon>mdi-chevron-down</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="(number, index) in itemsPerPageArray"
-                :key="index"
-                @click="updateItemsPerPage(number)"
-              >
-                <v-list-item-title>{{ number }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-
-          <v-spacer></v-spacer>
-
-          <span class="mr-4 grey--text"> Page {{ page }} of {{ numberOfPages }} </span>
-          <v-btn fab dark color="primary" class="mr-1" @click="formerPage">
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-btn fab dark color="primary" class="ml-1" @click="nextPage">
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-        </v-row>
-      </template>
     </v-data-iterator>
   </v-container>
 </template>
@@ -126,12 +91,9 @@ export default {
   data() {
     return {
       items: [],
-      itemsPerPageArray: [5, 10, 25, 50],
       search: '',
       filter: {},
       sortDesc: false,
-      page: 1,
-      itemsPerPage: 10,
       sortBy: 'name',
       keys: ['Id', 'InputHost', 'Host', 'Ip', 'Time', 'Timestamp', 'IsAlive'],
     };

@@ -21,6 +21,7 @@
       <v-btn v-show="!isPinging" color="secondary" fab small @click="setPingState">
         <v-icon>mdi-power</v-icon>
       </v-btn>
+      <v-span v-show="isPinging" class="mr-3">Pinging every {{ interval }} minutes</v-span>
       <v-btn v-show="isPinging" color="primary" fab small @click="setPingState">
         <v-icon>mdi-power</v-icon>
       </v-btn>
@@ -62,7 +63,12 @@ export default {
         {
           icon: 'mdi-home',
           title: 'Hosts',
-          to: '/add',
+          to: '/hosts',
+        },
+        {
+          icon: 'mdi-map-marker-distance',
+          title: 'Interval',
+          to: '/interval',
         },
       ],
       setPingStateResult: '',
@@ -72,6 +78,9 @@ export default {
   computed: {
     isPinging() {
       return this.$store.state.isPinging;
+    },
+    interval() {
+      return this.$store.state.interval;
     },
   },
   methods: {

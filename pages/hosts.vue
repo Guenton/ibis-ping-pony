@@ -100,20 +100,22 @@
       </v-row>
     </v-row>
 
-    <v-row v-show="deleteResult">
-      <v-alert dense text type="success">
+    <v-row v-show="deleteResult" align="center" justify="center" class="my-10">
+      <v-alert dense text type="success" dismissible>
         {{ deleteResult }}
       </v-alert>
     </v-row>
 
-    <v-row v-show="addHostResult">
-      <v-alert dense text type="success">
+    <v-row v-show="addHostResult" align="center" justify="center" class="my-10">
+      <v-alert dense text type="success" dismissible>
         {{ addHostResult }}
       </v-alert>
     </v-row>
 
-    <v-row v-show="error" class="mt-5">
-      {{ error }}
+    <v-row v-show="error" class="my-10" align="center" justify="center">
+      <v-alert dense text type="error" dismissible>
+        {{ error }}
+      </v-alert>
     </v-row>
   </v-container>
 </template>
@@ -142,7 +144,6 @@ export default {
       this.error = '';
     },
     async getListOfHosts() {
-      this.clearResultMessages();
       try {
         const res = await this.$axios.$get(`${process.env.baseUrl}/hosts`);
         this.hosts = res;
